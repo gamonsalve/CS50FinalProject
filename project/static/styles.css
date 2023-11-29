@@ -1,0 +1,18 @@
+.background-div {
+  height: 50px;
+}
+
+.my-carousel{
+    height: 100%;
+    background: #a9a9a9;
+}
+
+.carousel-inner{
+    padding-left:5%;
+    padding-right:5%;
+}
+
+  .carousel-item img {
+    object-fit: contain; /* or 'contain' if you want stretch instead of crop */
+  }
+  
