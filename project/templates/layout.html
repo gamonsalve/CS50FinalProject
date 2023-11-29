@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html lang="FR">
+
+    <head>
+        <link rel="icon" href="static\favicon.ico">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+            integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+            crossorigin="anonymous"></script>
+        <link href="styles.css" rel="stylesheet">
+        <title>La messe qui prend son temp Trois-Rivières : {% block title %}{% endblock %}</title>
+    </head>
+    <header>
+        <!-- Header goes here -->
+        <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light" style="padding:0px">
+            <a class="navbar-brand" href="#"> <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/0/07/Francescocoa.png" class="img-responsive"
+                    width="75" height="67.4" alt=""></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item" id="home">
+                        <a class="nav-link" href="/index.html">Home</a>
+                    </li>
+                    <li class="nav-item" id="activities">
+                        <a class="nav-link" href="/activities.html">Activities</a>
+                    </li>
+                    <li class="nav-item" id="church">
+                        <a class="nav-link" href="/churchfinder.html">Church Finder</a>
+                    </li>
+                    <li class="nav-item dropdown" id="mass">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Eucharist
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/mass.html">Mass Schedules</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/mass.html">Adoration Shedules</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/mass.html">Confessions</a>
+                        </div>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+            </div>
+    </header>
+    <main class="container-fluid py-5 text-center">
+        {% block main%}
+
+        {% endblock %}
+    </main>
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top container-fluid">
+        <div class="col-md d-flex align-items-center">
+            <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
+                <svg class="bi" width="30" height="24">
+                    <use xlink:href="#bootstrap"></use>
+                </svg>
+            </a>
+            <span class="text-muted">© 2023 Gmonsalve</span>
+        </div>
+
+        <ul class="nav col-md justify-content-center list-unstyled d-flex">
+            <li class="ml-3"><a href="#twitter" class="my-anchor">Home</a></li>
+            <li class="ml-3"><a href="#twitter" class="my-anchor">Activities</a></li>
+            <li class="ml-3"><a href="#facebook" class="my-anchor">Church Finder</a></li>
+            <li class="ml-3"><a href="#instagram" class="my-anchor">Eucharist</a></li>
+        </ul>
+
+        <ul class="nav col-md justify-content-end list-unstyled d-flex">
+            <li class="ml-3"><a href="#twitter"><img
+                        src="https://cdns.iconmonstr.com/wp-content/releases/preview/2012/240/iconmonstr-twitter-1.png"
+                        width="25px"></a></li>
+            <li class="ml-3"><a href="#facebook"><img
+                        src="https://cdns.iconmonstr.com/wp-content/releases/preview/2012/240/iconmonstr-facebook-1.png"
+                        width="25px"></a></li>
+            <li class="ml-3"><a href="#instagram"><img
+                        src="https://cdns.iconmonstr.com/wp-content/releases/preview/2016/240/iconmonstr-instagram-11.png"
+                        width="25px"></a></li>
+
+            <!--
+                  <li class="ms-3"><a class="text-muted" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"></use></svg></a></li>
+                  <li class="ms-3"><a class="text-muted" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"></use></svg></a></li>
+                  <li class="ms-3"><a class="text-muted" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"></use></svg></a></li>
+                  -->
+        </ul>
+    </footer>
+    </body>
+
+</html>
