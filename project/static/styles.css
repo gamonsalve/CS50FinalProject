@@ -32,3 +32,14 @@
 .news-background a{
   color: white;
 }
+
+.news-image{
+  width: 100%;
+  max-height: 492px;
+  object-fit: cover !important;
+}
+
+.news-container{
+  padding-left: 0%;
+  padding-right: 0%;
+}

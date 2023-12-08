@@ -17,8 +17,8 @@
 </head>
 <header>
     <!-- Header goes here -->
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light" style="padding:0px">
-        <a class="navbar-brand" href="#"> 
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light " style="padding:0px">
+        <a class="navbar-brand" href="#">
             <img src="static/MQPST_logo.jpg" class="img-responsive" width="75" height="67.4" alt="">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -27,21 +27,21 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav mr-auto flex-grow-1 bd-highlight">
                 <li class="nav-item" id="home">
-                    <a class="nav-link" href="/index.html">Home</a>
+                    <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item" id="nouvelles">
-                    <a class="nav-link" href="/nouvelles.html">Nouvelles</a>
+                    <a class="nav-link" href="/nouvelles">Nouvelles</a>
                 </li>
                 <li class="nav-item" id="equipe">
-                    <a class="nav-link" href="/equipe.html">Equipe</a>
+                    <a class="nav-link" href="/equipe">Equipe</a>
                 </li>
                 <li class="nav-item" id="video">
-                    <a class="nav-link" href="/video.html">Video</a>
+                    <a class="nav-link" href="/video">Video</a>
                 </li>
                 <li class="nav-item" id="temoignage">
-                    <a class="nav-link" href="/temoignage.html">Témoignage</a>
+                    <a class="nav-link" href="/temoignage">Témoignage</a>
                 </li>
                 <li class="nav-item dropdown" id="mass">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -59,14 +59,16 @@
                     </div>
                 </li>
             </ul>
-            <!--
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-            -->
+            <ul class="navbar-nav mr-auto bd-highlight">
+                <a class=" navbar-nav nav-link" href="login">se connecter</a>
+            </ul>
+            <ul class="navbar-nav mr-auto bd-highlight">
+                <a class=" navbar-nav nav-link" href="signup">s'inscrire</a>
+            </ul>
+                
         </div>
         </div>
+    </nav>
 </header>
 <div class="background-div"> </div>
 <main class="container-fluid p-0 text-center">
@@ -86,9 +88,10 @@
 
     <ul class="nav col-md justify-content-center list-unstyled d-flex">
         <li class="ml-3"><a href="#twitter" class="my-anchor">Home</a></li>
-        <li class="ml-3"><a href="#twitter" class="my-anchor">Activities</a></li>
-        <li class="ml-3"><a href="#facebook" class="my-anchor">Church Finder</a></li>
-        <li class="ml-3"><a href="#instagram" class="my-anchor">Eucharist</a></li>
+        <li class="ml-3"><a href="#twitter" class="my-anchor">Nouvelles</a></li>
+        <li class="ml-3"><a href="#facebook" class="my-anchor">Équipe</a></li>
+        <li class="ml-3"><a href="#instagram" class="my-anchor">Video</a></li>
+        <li class="ml-3"><a href="#instagram" class="my-anchor">Témoignage</a></li>
     </ul>
 
     <ul class="nav col-md justify-content-end list-unstyled d-flex">
