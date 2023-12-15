@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{%block title%}
+Gestion de nouvelles
+{% endblock%}
+{% block main %}
+<div class="container justify-content-center">
+    <table class="table m-5" id="news_table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Titre</th>
+                <th>Date</th>
+                <th>Utilisateur</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for new in news_list %}
+            <tr>
+                <td>{{new.newsid}}</td>
+                <td>{{new.title}}</td>
+                <td>{{new.datetime}}</td>
+                <td>{{new.user}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="container p-1 d-flex justify-content-center">
+    <form class="col-sm-6" method="post">
+        <input type="hidden" id="new_id" name="new_id" value="">
+        <button type="submit" name="edit" id ="edit" class="btn btn-primary" value="Edit">Edit</button>
+        <button type="submit" name="delete" id="delete" class="btn btn-danger" value="Delete">Delete</button>
+    </form>
+</div>
+<!-- ends -->
+<script>
+    document.onreadystatechange = () => {
+        if (document.readyState === 'complete') {
+            // document ready
+            const table = new DataTable('#news_table');
+            let edit_button = document.getElementById("edit");
+            let delete_button = document.getElementById("delete");
+            // disable buttons
+            delete_button.disabled = true;
+            edit_button.disabled = true;
+            // check if a row is selected
+            table.on('click', 'tbody tr', function (e) {
+                let classList = e.currentTarget.classList;
+                let row_data = table.row(this).data()
+                let selected_new = row_data[0]
+                let hidden_field = document.getElementById("new_id");
+
+                if (classList.contains('selected')) {
+                    // undo row selection
+                    classList.remove('selected');
+                    // deactivate buttons
+                    delete_button.disabled = true;
+                    edit_button.disabled = true;
+                }
+                else {
+                    //change selected row
+                    table.rows('.selected').nodes().each((row) => row.classList.remove('selected'));
+                    classList.add('selected');
+                    // populate hidden field
+                    hidden_field.value = selected_new
+                    // activate buttons
+                    delete_button.disabled = false;
+                    edit_button.disabled = false;
+                }
+            });
+        }
+    };
+
+</script>
+{% endblock %}

@@ -10,9 +10,10 @@ Accueil
     <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
     <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
   </ol>
+
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="static\photo1.jpg" >
+      <img src="static\photo1.jpg">
       <div class="carousel-caption d-none d-md-block">
         <h5>First slide label</h5>
         <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
@@ -42,10 +43,28 @@ Accueil
     <span class="sr-only">Next</span>
   </a>
 </div>
-  <!-- Carousel ends -->
+<!-- Carousel ends -->
 <br>
 <!-- Latests News starts -->
 <div class="container justify-content-center">
+  <div class="card-group">
+    {% for new in news%}
+    <div class="card">
+      <a href="/nouvelles?newsid={{new.id}}">
+      <img src="data:;base64,{{ new.image }}" class="card-img-top" alt="...">
+      <div class="card-body py-1 m-0">
+        <h5 class="card-title m-0">{{new.title}}</h5>
+      </div>
+      <div class="card-footer">
+        <small class="text-muted">Publié: {{new.datetime}}</small>
+      </div>
+    </a>
+    </div>
+    {% endfor %}
+
+    
+  </div>
+  <!-- Latests News starts
   <div class="row">
     <div class="col news-background d-flex align-items-end justify-content-center" style="background-image: url('/static/photo1.jpg')">
       <a href="#" class="text-justify news-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam id sagittis lectus. </a>
@@ -61,7 +80,8 @@ Accueil
     <div class="col-sm d-flex align-items-center justify-content-center">
     <a href="#" class="text-center">plus de Nouvelles</a>
     </div>
-  </div>
+    
+  </div> -->
 </div>
 <!-- ends -->
 {% endblock %}

@@ -12,7 +12,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link href="static\styles.css" rel="stylesheet">
+
+    <!-- Datatables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+
     <title>La messe qui prend son temp Trois-Rivières : {% block title %}{% endblock %}</title>
 </head>
 <header>
@@ -49,23 +55,33 @@
                         Admin
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/gestion_nouvelle.html">Gestion de Nouvelle</a>
+                        <a class="dropdown-item" href="/gestion_nouvelles">Gestion de Nouvelles</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/gestion_Dates.html">Gestion de Dates</a>
+                        <a class="dropdown-item" href="/gestion_dates">Gestion de Dates</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/gestion_equipe.html">Gestion Equipe</a>
+                        <a class="dropdown-item" href="/gestion_equipe">Gestion Equipe</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/gestion_contenu.html">Gestion Contenu</a>
+                        <a class="dropdown-item" href="/gestion_contenu">Gestion Contenu</a>
                     </div>
                 </li>
             </ul>
+            {% if session["user_id"] %}
+
+            <ul class="navbar-nav mr-auto bd-highlight">
+                
+                <a class=" navbar-nav nav-link text-center  " href="logout">{{session["name"]}} <br> déconnexion</a>
+            </ul>
+
+            {% else %}
+
             <ul class="navbar-nav mr-auto bd-highlight">
                 <a class=" navbar-nav nav-link" href="login">se connecter</a>
             </ul>
             <ul class="navbar-nav mr-auto bd-highlight">
                 <a class=" navbar-nav nav-link" href="signup">s'inscrire</a>
             </ul>
-                
+
+            {% endif %}
         </div>
         </div>
     </nav>
@@ -113,5 +129,22 @@
     </ul>
 </footer>
 </body>
+{% for category, message in get_flashed_messages(with_categories=true) %}
+<script>
+    let message = "{{ message }}";
+    let category = "{{ category }}";
+    let button_text = ""
+    if (category == "success") {
+        button_text = "OK"
+    } else {
+        button_text = "try again"
+    }
+    swal({
+        title: message,
+        icon: category,
+        button: button_text
+    });
+</script>
+{% endfor %}
 
 </html>
