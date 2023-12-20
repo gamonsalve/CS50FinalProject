@@ -35,21 +35,26 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto flex-grow-1 bd-highlight">
                 <li class="nav-item" id="home">
-                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link" href="/">Accueil</a>
                 </li>
+                <!--
                 <li class="nav-item" id="nouvelles">
                     <a class="nav-link" href="/nouvelles">Nouvelles</a>
                 </li>
+                -->
                 <li class="nav-item" id="equipe">
                     <a class="nav-link" href="/equipe">Equipe</a>
                 </li>
+                <!--
                 <li class="nav-item" id="video">
                     <a class="nav-link" href="/video">Video</a>
                 </li>
                 <li class="nav-item" id="temoignage">
                     <a class="nav-link" href="/temoignage">Témoignage</a>
                 </li>
-                <li class="nav-item dropdown" id="mass">
+                -->
+                {% if session["user_id"] %}
+                <li class="nav-item dropdown" id="Admin">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Admin
@@ -57,13 +62,18 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="/gestion_nouvelles">Gestion de Nouvelles</a>
                         <div class="dropdown-divider"></div>
+                        <!--
                         <a class="dropdown-item" href="/gestion_dates">Gestion de Dates</a>
                         <div class="dropdown-divider"></div>
+                        -->
                         <a class="dropdown-item" href="/gestion_equipe">Gestion Equipe</a>
-                        <div class="dropdown-divider"></div>
+                        <!-- <div class="dropdown-divider"></div> -->
+                        <!--
                         <a class="dropdown-item" href="/gestion_contenu">Gestion Contenu</a>
+                        -->
                     </div>
                 </li>
+                {% endif %}
             </ul>
             {% if session["user_id"] %}
 

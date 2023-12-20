@@ -1,4 +1,4 @@
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy import create_engine
@@ -6,6 +6,10 @@ from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
 from sqlalchemy import inspect
 from sqlalchemy.sql import text
 from base64 import b64encode
+from datetime import datetime
+from fileinput import filename
+import os
+from helpers import login_required, convertToBLOB, db_execute
 app=Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
@@ -27,7 +31,10 @@ def index():
         for row in rows:
             #let's populate news list
             image = b64encode(row.image).decode("utf-8")
-            new = {"id":row.newsid, "text": row.news_text, "title":row.title, "image":image, "datetime":row.datetime}
+            date_time = datetime.fromtimestamp(row.datetime)
+            date_time = date_time.strftime("%m/%d/%Y, %H:%M:%S")
+            print(date_time)
+            new = {"id":row.newsid, "text": row.news_text, "title":row.title, "image":image, "datetime":date_time}
             news.append(new)
     return render_template("index.html",news=news)
 
@@ -43,20 +50,20 @@ def news():
         image = b64encode(rows[0].image).decode("utf-8")
     return render_template("news_viewer.html",text=rows[0].news_text, title=rows[0].title,image=image)
 
-@app.route("/modifier_nouvelle")
-def edit_news():
-    return redirect("/")
-
 @app.route("/gestion_nouvelles",methods=["GET","POST"])
+@login_required
 def manage_news():
     if request.method == "POST":
         # let's check if we want to delete or edit
         edit = request.form.get("edit")
         delete = request.form.get("delete")
         new_id = request.form.get("new_id")
+        create = request.form.get("create")
         if edit=="Edit":
             # edit news, Let;s move to the other view with a form
-            redirect("/modifier_nouvelle?newsid=")
+            return redirect(url_for(".edit_news",new_id=new_id))
+        elif create=="Create":
+            return redirect("creer_nouvelle")
         elif delete=="Delete":
             # check if selected new exists
             with db_engine.connect() as con:
@@ -72,11 +79,97 @@ def manage_news():
             flash("An error has occured","warning")
             return redirect("\gestion_nouvelles")
 
-    else:
+    elif request.method == "GET":
         with db_engine.connect() as con:
             rs=db_execute(con, "SELECT title,newsid,user,datetime FROM news",{})
             news_list=rs.all()
             return render_template("manage_news.html",news_list=news_list)
+
+@app.route("/creer_nouvelle", methods=["GET","POST"])
+@login_required
+def create_news():
+    if request.method == "GET":
+        #render the form
+        return render_template("create_news.html")
+    elif request.method == "POST":  
+        # check form fields
+        image = request.files["image"]
+        image.save(image.filename)
+        filename= image.filename
+        image = convertToBLOB(image.filename)
+        title = request.form.get("title")
+        content_text = request.form.get("content_text")
+
+        if None in (title, content_text):
+            flash("An error has occured","error")
+            return redirect("/creer_nouvelle")
+        if "" in (title, content_text):
+            flash("An error has occured","error")
+            return redirect("/creer_nouvelle") 
+        # Let's save the new
+        with db_engine.connect() as con:
+            date_time = datetime.now()
+            date_time = date_time.timestamp()
+            db_execute(con,
+                       "INSERT INTO news (title, news_text, image, datetime, user) VALUES (:title, :content_text, :image, :date_time, :user)",
+                       {"title":title, "content_text":content_text, 
+                        "image":image, "date_time":date_time, "user":session["user_id"]})
+            con.commit()
+            flash("New Successfully created","success")
+            return redirect("/")
+
+    
+
+@app.route("/modifier_nouvelle", methods=["GET","POST"])
+@login_required
+def edit_news():
+    if request.method == "POST":
+        new_id=request.form.get("new_id")
+        image = request.files["image"]
+        image.save(image.filename)
+        filename= image.filename
+        image = convertToBLOB(image.filename)
+        title = request.form.get("title")
+        content_text = request.form.get("content_text")
+        print(new_id, title, content_text)
+        if None in (new_id, title, content_text):
+            flash("An error has occurred","error")
+            return redirect("/gestion_nouvelles")
+
+        if "" in (new_id, title, content_text):
+            flash("An error has occurred","error")
+            return redirect("/gestion_nouvelles")
+        # Everything is ok let's update the new
+        # confirm that the news exists
+        with db_engine.connect() as con:
+            rs = db_execute(con, "SELECT * FROM news WHERE newsid=:new_id",{"new_id":new_id})
+            rows = rs.all()
+            if len(rows)==1:
+                # the new exists let's modify it
+                date_time = datetime.now()
+                date_time = date_time.timestamp()
+                print(date_time)
+                db_execute(con, "UPDATE news SET title=:title, news_text=:content_text, image=:image, datetime=:date_time WHERE newsid=:new_id",
+                           {"title": title, "image":image, "content_text":content_text, "date_time":date_time,"new_id":new_id })
+                con.commit()
+                os.remove(filename)
+                flash("New Successfully updated","success")
+                return redirect(url_for(".news",newsid=new_id))
+
+    elif request.method == "GET":
+        # 1. show the form with the fields already populated
+        # 2. check data base
+        new_id = request.args.get("new_id")
+        with db_engine.connect() as con:
+            rs = db_execute(con, "SELECT * FROM news WHERE newsid=:new_id",{"new_id":new_id})
+            rows = rs.all()
+            if len(rows)==1:
+                title = rows[0].title
+                content = rows[0].news_text
+                image = b64encode(rows[0].image).decode("utf-8")
+            return render_template("edit_news.html",title=title, content=content, image=image, new_id=new_id)
+    return redirect("/")
+
 
 @app.route("/equipe")
 def team():
@@ -84,9 +177,9 @@ def team():
 
 @app.route("/login",methods = ['POST', 'GET'])
 def login():
-    
-    session.clear()
-
+    if session.get("user_id"):
+        # redirect user to home page
+        return redirect("/")
     if request.method == "POST":
         # 1. get form data
         email = request.form.get("email")
@@ -106,15 +199,20 @@ def login():
                 # user exists let's check password
                  # 3. check if password match
                 valid_password=check_password_hash(rows[0].password, password)
-            
+            else:
+                flash("User not found","error")
+                return redirect("/login")
             if valid_password:
                 # Save session
                 session["user_id"]=rows[0].username
                 session["name"]= rows[0].name
                 print(session["user_id"])
                 return redirect("/")
+            else:
+                flash("incorrect password","error")
+                return redirect("/login")
     # log user in
-    else:
+    elif request.method == "GET":
         return render_template("login.html")
     
     
@@ -149,7 +247,7 @@ def signup():
         # 3. let's redirect to login with a message.
             flash("User Succesfully Created","success")
             return redirect("/login")
-    else:
+    elif request.method == "GET":
         return render_template("signup.html")
 
 @app.errorhandler(404)
@@ -162,24 +260,5 @@ def logout():
 
     # Forget any user_id
     session.clear()
-
     # Redirect user to login form
     return redirect("/")
-
-#### Helper Functions #####
-def login_required(f):
-    """
-    Decorate routes to require login.
-
-    http://flask.pocoo.org/docs/0.12/patterns/viewdecorators/
-    """
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if session.get("user_id") is None:
-            return redirect("/login")
-        return f(*args, **kwargs)
-    return decorated_function
-
-def db_execute(db_connection,query,values):
-    query = text(query)     
-    return db_connection.execute(query,values)
